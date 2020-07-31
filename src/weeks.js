@@ -3,10 +3,6 @@ export let weeks = [
 		name: '1',
 		steps: [
 			{
-				name: 'ToneListening',
-				title: 'Tone Listening'
-			},
-			{
 				name: 'Family'
 			},
 			{
@@ -16,6 +12,10 @@ export let weeks = [
 			{
 				name: 'Opposites',
 				side: 'left'
+			},
+			{
+				name: 'ToneListening',
+				title: 'Tone Listening'
 			}
 		]
 	},
