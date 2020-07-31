@@ -43,7 +43,7 @@
 	import WordPick from './WordPick.svelte';
 	import Radicals from './Radicals.svelte';
 	import Video from './Video.svelte';
-	//import ToneListening from './ToneListening.svelte';
+	import ToneListening from './ToneListening.svelte';
 
 	export let name;
 	let week;
@@ -103,7 +103,7 @@
 			{:else if step.name == 'Video'}
 				<Video video_id="{step.id}" start="{step.start}" end="{step.end}" title="{step.title}"/>
 			{:else if step.name == 'ToneListening'}
-				<!--ToneListening on:finished={handleStepFinished} /-->
+				<ToneListening on:finished={handleStepFinished} />
 			{/if}
 		{:else}
 			<div id="done">All done!</div>
