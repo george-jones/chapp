@@ -1,30 +1,42 @@
+<style>
+#content {
+	background-color: #333;
+	padding: 15px;
+}
+
+#content li {
+	cursor: pointer;
+}
+
+#content li:hover {
+	text-decoration: underline;
+	text-decoration-color: #777;
+}
+</style>
+
 <script>
-	export let name;
+	import { weeks } from './weeks.js';
+	let weekName;
+
+	function loadWeek (evt) {
+		weekName = evt.currentTarget.getAttribute('data-week');
+	}
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<svelte:head>
+	<title>Polaris Chinese Level 2</title>
+</svelte:head>
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+{#if weekName}
+	Start week: {weekName}
+{:else}
+	<div id="content">
+		<h1>Polaris Chinese Level 2</h1>
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
+		<ul>
+		{#each weeks as week}
+			<li on:click={loadWeek} data-week="{week.name}">Week: {week.name}</li>
+		{/each}
+		</ul>
+	</div>
+{/if}
