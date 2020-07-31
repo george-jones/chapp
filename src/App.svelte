@@ -15,6 +15,7 @@
 </style>
 
 <script>
+	import Week from './components/Week.svelte';
 	import { weeks } from './weeks.js';
 	let weekName;
 
@@ -28,7 +29,7 @@
 </svelte:head>
 
 {#if weekName}
-	Start week: {weekName}
+	<Week name="{weekName}" />
 {:else}
 	<div id="content">
 		<h1>Polaris Chinese Level 2</h1>

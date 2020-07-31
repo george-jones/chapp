@@ -3,10 +3,6 @@ export let weeks = [
 		name: '1',
 		steps: [
 			{
-				name: 'ToneListening',
-				title: 'Tone Listening'
-			},
-			{
 				name: 'Family'
 			},
 			{
@@ -16,6 +12,10 @@ export let weeks = [
 			{
 				name: 'Opposites',
 				side: 'left'
+			},
+			{
+				name: 'ToneListening',
+				title: 'Tone Listening'
 			}
 		]
 	},
@@ -77,7 +77,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '611',
 				end: '1210'
 			}
@@ -119,7 +119,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '1210',
 				end: '1803'
 			}
@@ -161,7 +161,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '1803',
 				end: '2406'
 			}
@@ -203,7 +203,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '2406',
 				end: '3008'
 			}
@@ -245,7 +245,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '3008',
 				end: '3612'
 			}
@@ -287,7 +287,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '3612',
 				end: '4203'
 			}
@@ -329,7 +329,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '4203',
 				end: '4805'
 			}
@@ -371,7 +371,7 @@ export let weeks = [
 			{
 				name: 'Video',
 				title: 'Chinese Dialogues',
-				url: 'https://www.youtube.com/watch?v=y9MP2zfTuz8',
+				id: 'y9MP2zfTuz8',
 				start: '4805',
 				end: '5399'
 			}
