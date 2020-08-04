@@ -17,6 +17,7 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import { WordLists } from '../wordlists.js';
 	import { rand } from '../rand.js';
@@ -104,7 +105,7 @@
 		}
 
 		shuffled = rand.shuffle(shuffled);
-		if (testingMode) {
+		if (get(testingMode)) {
 			shuffled = shuffled.slice(0, 3);
 		}
 	};

@@ -57,6 +57,7 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import { WordLists } from '../wordlists.js';
 	import { rand } from '../rand.js';
@@ -101,7 +102,7 @@
 	let options;
 	let lettersCssClass = 'chinese letters';
 
-	if (testingMode) {
+	if (get(testingMode)) {
 		segments = [ segments[segments.length - 2], segments[segments.length - 1] ];
 	}
 

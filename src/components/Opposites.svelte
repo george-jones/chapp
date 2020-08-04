@@ -15,6 +15,7 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import { rand } from '../rand.js';
 	import { testingMode } from '../globals.js';
@@ -67,7 +68,7 @@
 	let currentWrong = false;
 	let pickedClass = undefined;
 
-	if (testingMode) {
+	if (get(testingMode)) {
 		randomized = randomized.slice(0, 3);
 	}
 

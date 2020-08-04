@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen } = require('electron');
+const { app, Menu, BrowserWindow, screen } = require('electron');
 require('electron-reload')(__dirname);
 
 const createWindow = () => {
@@ -13,6 +13,30 @@ const createWindow = () => {
 	});
 
 	//window.removeMenu();
+	window.setAutoHideMenuBar(true);
+	window.setMenuBarVisibility(false);
+
+	const template = [
+		{
+			label: 'Menu',
+			submenu: [
+				{ role: 'reload' },
+				{ role: 'forcereload' },
+				{ role: 'toggledevtools' },
+				{
+					label: 'Toggle Test Mode',
+					click() {
+						window.webContents.send('toggletestmode', '1');
+					}
+				},
+				{ role: 'quit' }
+			]
+		}
+	];
+	
+	const menu = Menu.buildFromTemplate(template);
+	window.setMenu(menu);
+
 	window.loadFile('public/index.html');
 };
 

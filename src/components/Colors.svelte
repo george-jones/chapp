@@ -36,6 +36,7 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
+	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import { WordLists } from '../wordlists.js';
 	import { rand } from '../rand.js';
@@ -56,7 +57,7 @@
 	let numTotal = 0;
 	let finished = false;
 
-	if (testingMode) {
+	if (get(testingMode)) {
 		allColors = allColors.slice(0, 2);
 	}
 
