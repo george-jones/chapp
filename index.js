@@ -1,4 +1,5 @@
 const { app, Menu, BrowserWindow, screen } = require('electron');
+let path = require('path');
 require('electron-reload')(__dirname);
 
 const createWindow = () => {
@@ -9,7 +10,8 @@ const createWindow = () => {
 		height: height / 1.25,
 		webPreferences: {
 			nodeIntegration: true
-		}
+		},
+		icon: path.join(__dirname, 'pa.ico')
 	});
 
 	//window.removeMenu();
