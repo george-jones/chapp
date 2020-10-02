@@ -109,6 +109,7 @@
 	segments.forEach(function (seg) {
 		var q = seg.end - seg.start + 1;
 		var idx = seg.start + Math.floor(q * Math.random());
+		idx = 985;
 		chosen.push({ sentence: sentences[idx], number: idx + 1 });
 	});
 
@@ -135,7 +136,10 @@
 			return;
 		}
 
-		current = s.sentence;
+		// clone
+		current = Object.assign({}, s.sentence);
+		current.pinyin = current.pinyin.toLocaleLowerCase();
+		current.toneless = current.toneless.toLocaleLowerCase();
 		soundSrc = 'sentence_audio/' + s.number + '.mp3';
 		currentWrong = false;
 		lettersCssClass = 'chinese letters';
