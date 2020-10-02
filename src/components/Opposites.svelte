@@ -11,6 +11,31 @@
 		margin: 10px;
 		cursor: pointer;
 	}
+
+	.oppositePair {
+		display: inline-block;
+		margin: 15px;
+	}
+
+	.chinese.guessMe {
+		background-color: #444;
+		border-radius: 5px;
+		padding: 5px;
+		display: inline-block;
+		min-height: 1.5em;
+		min-width: 1em;
+		vertical-align: top;
+	}
+
+	.chinese.fillMe {
+		background-color: #222;
+		border-radius: 5px;
+		padding: 5px;
+		display: inline-block;
+		min-height: 1.5em;
+		min-width: 1em;
+		vertical-align: top;
+	}
 </style>
 
 <script>
@@ -140,25 +165,18 @@
 <h1>Opposites</h1>
 
 {#if !finished}
-	{#if current}
-		<div id="theWord" class="chinese" title="{current[leftIndex].pinyin}">{current[leftIndex].chinese}</div>
-	{/if}
-
 	{#each alphabetized as guess}
 		<button data-chinese="{guess[rightIndex].chinese}" class="chinese" on:click={doClick} title="{guess[rightIndex].pinyin} ({guess[rightIndex].english})">{guess[rightIndex].chinese}</button>
 	{/each}
 
-	{#if pickedClass}
-		<div in:fade class="chinese {pickedClass}">
-			<span>
-				{#if pickedClass == 'pickedRight'}
-					{current[leftIndex].english} - {current[rightIndex].english}
-				{:else}
-					Find the opposite of: {current[leftIndex].english}
-				{/if}
-			</span>
-		</div>
-	{/if}
+	<div>
+	{#each randomized as rando}
+			<div class="oppositePair">
+				<div class="chinese guessMe" title="{rando[leftIndex].pinyin}">{rando[leftIndex].chinese}</div>
+				<div class="chinese fillMe"></div>
+			</div>
+	{/each}
+	</div>
 
 	{#if numTotal > 0}
 		<div class="score">
