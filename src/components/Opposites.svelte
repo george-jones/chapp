@@ -52,6 +52,10 @@
 		background-color: #ffa;
 		position: absolute;
 	}
+
+	:global(.chinese.fillMe.hovering) {
+		background-color: #556;
+	}
 </style>
 
 <script>
@@ -206,6 +210,33 @@ import { element } from 'svelte/internal';
 		if (moving) {
 			moving.element.style.left = (moving.elementStart.x + evt.clientX - moving.pointerStart.x) + 'px';
 			moving.element.style.top = (moving.elementStart.y + evt.clientY - moving.pointerStart.y) + 'px';
+
+			let top = moving.element.offsetTop;
+			let bottom = top + moving.element.offsetHeight;
+			let left = moving.element.offsetLeft;
+			let right = left + moving.element.offsetWidth;
+
+			if (moving.destination) {
+				moving.destination.classList.remove('hovering');
+				moving.destination = null;
+			}
+
+			document.getElementById('container').querySelectorAll('.fillMe').forEach((fillable) => {
+				if (moving.destination) {
+					return;
+				}
+				let fillableTop = fillable.offsetTop;
+				let fillableBottom = fillableTop + fillable.offsetHeight;
+				let fillableLeft = fillable.offsetLeft;
+				let fillableRight = fillableLeft + fillable.offsetWidth;
+
+				if (fillableTop <= bottom && fillableBottom >= top && fillableLeft <= right && fillableRight >= left) {
+					fillable.classList.add('hovering');
+					console.log(fillable.classList);
+					moving.destination = fillable;
+				}
+			});
+			
 		}
 	}
 
