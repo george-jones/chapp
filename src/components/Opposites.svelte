@@ -102,6 +102,7 @@ import { element } from 'svelte/internal';
 		[ { "pinyin": "máng", "chinese": "忙", "english": "busy"}, { "pinyin": "xián", "chinese": "闲", "english": "unbusy" } ],
 		[ { "pinyin": "kǔ", "chinese": "苦", "english": "bitter"}, { "pinyin": "tián", "chinese": "甜", "english": "sweet" } ]
 	];
+	let container;
 	let randomized = rand.shuffle(pairs);
 	let alphabetized = pairs.splice(0); // copy
 	let leftIndex;
@@ -125,9 +126,9 @@ import { element } from 'svelte/internal';
 	}
 
 	alphabetized.sort(function (a, b) {
-		if (a[rightIndex].pinyin > b[rightIndex].pinyin) {
+		if (a[leftIndex].pinyin > b[leftIndex].pinyin) {
 			return 1;
-		} else if (a[rightIndex].pinyin < b[rightIndex].pinyin) {
+		} else if (a[leftIndex].pinyin < b[leftIndex].pinyin) {
 			return -1;
 		} else {
 			return 0; // shouldn't happen!
@@ -199,14 +200,44 @@ import { element } from 'svelte/internal';
 		moving.element.style.top = moving.elementStart.y + 'px';
 	}
 
+	function unguess(guess_id) {
+		if (guess_id) {
+			container.querySelectorAll("[data-guess-id='" + guess_id + "']").forEach((el) => {
+				var cl = el.classList;
+				if (cl.contains('pickable')) {
+					cl.remove('picked');
+					el.style.display = '';
+				} else {
+					el.innerText = '';
+					el.setAttribute('title', '');
+					el.removeAttribute('data-guess-id');
+				}
+			});
+		}
+	}
+
 	function doMouseUp(evt) {
 		if (moving) {
+			if (moving.destination) {
+				let prev_guess = moving.destination.getAttribute('data-guess-id');
+				if (prev_guess) {
+					unguess(prev_guess);
+				}
+				moving.destination.setAttribute('data-guess-id', moving.element.getAttribute('data-guess-id'));
+				moving.destination.innerText = moving.element.getAttribute('data-chinese');
+				moving.destination.setAttribute('title', moving.element.getAttribute('title'));
+				moving.element.style.display = 'none';
+			}
 			moving.element.classList.remove('picked');
+			moving.destination.classList.remove('hovering');
 			moving = null;
 		}
 	}
 
 	function doMouseMove(evt) {
+		if (!container) {
+			container = document.getElementById('container');
+		}
 		if (moving) {
 			moving.element.style.left = (moving.elementStart.x + evt.clientX - moving.pointerStart.x) + 'px';
 			moving.element.style.top = (moving.elementStart.y + evt.clientY - moving.pointerStart.y) + 'px';
@@ -221,7 +252,7 @@ import { element } from 'svelte/internal';
 				moving.destination = null;
 			}
 
-			document.getElementById('container').querySelectorAll('.fillMe').forEach((fillable) => {
+			container.querySelectorAll('.fillMe').forEach((fillable) => {
 				if (moving.destination) {
 					return;
 				}
@@ -232,12 +263,16 @@ import { element } from 'svelte/internal';
 
 				if (fillableTop <= bottom && fillableBottom >= top && fillableLeft <= right && fillableRight >= left) {
 					fillable.classList.add('hovering');
-					console.log(fillable.classList);
 					moving.destination = fillable;
 				}
 			});
 			
 		}
+	}
+
+	function doFillMeMouseDown(evt) {
+		// undo guess
+		unguess(evt.target.getAttribute('data-guess-id'));
 	}
 
 </script>
@@ -246,17 +281,17 @@ import { element } from 'svelte/internal';
 <h1>Opposites</h1>
 
 {#if !finished}
-	{#each alphabetized as guess}
-		<div data-chinese="{guess[rightIndex].chinese}" class="chinese pickable"
+	{#each randomized as rando, i}
+		<div data-guess-id="{i}" data-chinese="{rando[rightIndex].chinese}" class="chinese pickable"
 			on:mousedown={doMouseDown} on:mouseup={doMouseUp}
-			title="{guess[rightIndex].pinyin} ({guess[rightIndex].english})">{guess[rightIndex].chinese}</div>
+			title="{rando[rightIndex].pinyin} ({rando[rightIndex].english})">{rando[rightIndex].chinese}</div>
 	{/each}
 
 	<div>
-	{#each randomized as rando}
+	{#each alphabetized as a}
 			<div class="oppositePair">
-				<div class="chinese guessMe" title="{rando[leftIndex].pinyin}">{rando[leftIndex].chinese}</div>
-				<div class="chinese fillMe"></div>
+				<div class="chinese guessMe" title="{a[leftIndex].pinyin}">{a[leftIndex].chinese}</div>
+				<div class="chinese fillMe" on:mousedown={doFillMeMouseDown}></div>
 			</div>
 	{/each}
 	</div>

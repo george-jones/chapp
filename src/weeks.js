@@ -11,7 +11,7 @@ export let weeks = [
 			},
 			{
 				name: 'Opposites',
-				side: 'left'
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',
@@ -95,7 +95,7 @@ export let weeks = [
 			},
 			{
 				name: 'Opposites',
-				side: 'left'
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',
@@ -179,7 +179,7 @@ export let weeks = [
 			},
 			{
 				name: 'Opposites',
-				side: 'left'
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',
@@ -263,7 +263,7 @@ export let weeks = [
 			},
 			{
 				name: 'Opposites',
-				side: 'left'
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',
@@ -347,7 +347,7 @@ export let weeks = [
 			},
 			{
 				name: 'Opposites',
-				side: 'left'
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',
