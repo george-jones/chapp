@@ -56,6 +56,10 @@
 	:global(.chinese.fillMe.hovering) {
 		background-color: #556;
 	}
+
+	:global(.chinese.fillMe.wrong) {
+		background-color: #900;
+	}
 </style>
 
 <script>
@@ -109,6 +113,7 @@ import { element } from 'svelte/internal';
 	let rightIndex;
 	let numRight = 0;
 	let numTotal = 0;
+	let counted = false;
 	let finished = false;
 	let moving;
 
@@ -134,54 +139,6 @@ import { element } from 'svelte/internal';
 			return 0; // shouldn't happen!
 		}
 	});
-
-	/*
-
-	function finish () {
-		// How to communicate with parent?
-		let summary = `${numRight} / ${numTotal}`;
-		finished = true;
-		stepSummaries.update(function (v) {
-			v['Opposites'] = summary;
-			return v;
-		});
-		dispatch('finished');
-	}
-
-	function doNext() {
-		currentIndex++;
-		current = randomized[currentIndex];
-
-		if (!current) {
-			finish();
-			return;
-		}
-
-		currentWrong = false;
-		pickedClass = undefined;
-	}
-
-	function doClick(evt) {
-		let t = evt.target;
-
-		if (evt.target.getAttribute('data-chinese') === current[rightIndex].chinese) {
-			if (!currentWrong) {
-				numRight++;
-				numTotal++;
-			}
-			pickedClass = 'pickedRight';
-			window.setTimeout(doNext, 1500);
-		} else {
-			if (!currentWrong) {
-				currentWrong = true;
-				pickedClass = 'pickedWrong';
-				numTotal++;
-			}
-		}
-	}
-
-	doNext();
-	*/
 
 	function doMouseDown(evt) {
 		moving = { }
@@ -211,6 +168,7 @@ import { element } from 'svelte/internal';
 					el.innerText = '';
 					el.setAttribute('title', '');
 					el.removeAttribute('data-guess-id');
+					el.classList.remove('wrong');
 				}
 			});
 		}
@@ -227,10 +185,12 @@ import { element } from 'svelte/internal';
 				moving.destination.innerText = moving.element.getAttribute('data-chinese');
 				moving.destination.setAttribute('title', moving.element.getAttribute('title'));
 				moving.element.style.display = 'none';
+				moving.destination.classList.remove('hovering');
 			}
 			moving.element.classList.remove('picked');
-			moving.destination.classList.remove('hovering');
 			moving = null;
+
+			checkDone();
 		}
 	}
 
@@ -275,6 +235,46 @@ import { element } from 'svelte/internal';
 		unguess(evt.target.getAttribute('data-guess-id'));
 	}
 
+	function checkDone() {
+		// first, see if all things that must be guessed have been
+		let guessed = container.querySelectorAll(".fillMe[data-guess-id]");
+		let someWrong = false;
+
+		if (guessed.length == randomized.length) {
+
+			guessed.forEach((g) => {
+				let guess_id = g.getAttribute('data-guess-id');
+				let prev = g.previousElementSibling.textContent;
+				let guessed_opposite = randomized[guess_id][leftIndex].chinese;
+				
+				if (prev == guessed_opposite) {
+					g.classList.remove('wrong');
+					if (!counted) {
+						numRight++;
+					}
+				} else {
+					g.classList.add('wrong');
+					someWrong = true;
+				}
+
+				if (!counted) {
+					numTotal++;
+				}
+			});
+
+			counted = true;
+
+			if (!someWrong) {
+				let summary = `${numRight} / ${numTotal}`;
+				finished = true;
+				stepSummaries.update(function (v) {
+					v['Opposites'] = summary;
+					return v;
+				});
+				dispatch('finished');
+			}
+		}
+	}
 </script>
 
 <div id="container" on:mousemove={doMouseMove} on:mouseup={doMouseUp}>
