@@ -1,15 +1,16 @@
 <style>
+	#container {
+		height: 100%;
+		user-select: none;
+		position: relative;
+	}
+
 	.chinese {
 		font-size: 48px;
 	}
 
 	#theWord {
 		font-size: 72px;
-	}
-
-	button.chinese {
-		margin: 10px;
-		cursor: pointer;
 	}
 
 	.oppositePair {
@@ -36,6 +37,21 @@
 		min-width: 1em;
 		vertical-align: top;
 	}
+
+	.pickable {
+		margin: 10px;
+		cursor: pointer;
+		padding: 5px;
+		border-radius: 5px;
+		background-color: #ddd;
+		color: #222;
+		display: inline-block;
+	}
+
+	:global(.pickable.picked) {
+		background-color: #ffa;
+		position: absolute;
+	}
 </style>
 
 <script>
@@ -45,6 +61,7 @@
 	import { rand } from '../rand.js';
 	import { testingMode } from '../globals.js';
 	import { stepSummaries } from '../globals.js';
+import { element } from 'svelte/internal';
 
 	export let side;
 	const dispatch = createEventDispatcher();
@@ -88,10 +105,7 @@
 	let numRight = 0;
 	let numTotal = 0;
 	let finished = false;
-	let current;
-	let currentIndex = -1;
-	let currentWrong = false;
-	let pickedClass = undefined;
+	let moving;
 
 	if (get(testingMode)) {
 		randomized = randomized.slice(0, 3);
@@ -115,6 +129,8 @@
 			return 0; // shouldn't happen!
 		}
 	});
+
+	/*
 
 	function finish () {
 		// How to communicate with parent?
@@ -160,13 +176,49 @@
 	}
 
 	doNext();
+	*/
+
+	function doMouseDown(evt) {
+		moving = { }
+		moving.element = evt.target;
+		moving.elementStart = {
+			x: moving.element.offsetLeft,
+			y: moving.element.offsetTop
+		};
+		moving.pointerStart = {
+			x: evt.clientX,
+			y: evt.clientY
+		};
+
+		moving.element.classList.add('picked');
+		moving.element.style.left = moving.elementStart.x + 'px';
+		moving.element.style.top = moving.elementStart.y + 'px';
+	}
+
+	function doMouseUp(evt) {
+		if (moving) {
+			moving.element.classList.remove('picked');
+			moving = null;
+		}
+	}
+
+	function doMouseMove(evt) {
+		if (moving) {
+			moving.element.style.left = (moving.elementStart.x + evt.clientX - moving.pointerStart.x) + 'px';
+			moving.element.style.top = (moving.elementStart.y + evt.clientY - moving.pointerStart.y) + 'px';
+		}
+	}
+
 </script>
 
+<div id="container" on:mousemove={doMouseMove} on:mouseup={doMouseUp}>
 <h1>Opposites</h1>
 
 {#if !finished}
 	{#each alphabetized as guess}
-		<button data-chinese="{guess[rightIndex].chinese}" class="chinese" on:click={doClick} title="{guess[rightIndex].pinyin} ({guess[rightIndex].english})">{guess[rightIndex].chinese}</button>
+		<div data-chinese="{guess[rightIndex].chinese}" class="chinese pickable"
+			on:mousedown={doMouseDown} on:mouseup={doMouseUp}
+			title="{guess[rightIndex].pinyin} ({guess[rightIndex].english})">{guess[rightIndex].chinese}</div>
 	{/each}
 
 	<div>
@@ -184,3 +236,5 @@
 		</div>
 	{/if}
 {/if}
+
+</div>
