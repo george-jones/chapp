@@ -140,37 +140,64 @@ import { element } from 'svelte/internal';
 		}
 	});
 
-	function doMouseDown(evt) {
+	function startMove(el, mouseX, mouseY, thingX, thingY) {
 		moving = { }
-		moving.element = evt.target;
+		moving.element = el;
 		moving.elementStart = {
-			x: moving.element.offsetLeft,
-			y: moving.element.offsetTop
+			x: thingX,
+			y: thingY
 		};
 		moving.pointerStart = {
-			x: evt.clientX,
-			y: evt.clientY
+			x: mouseX,
+			y: mouseY
 		};
 
+		moving.element.style.display = '';
 		moving.element.classList.add('picked');
 		moving.element.style.left = moving.elementStart.x + 'px';
 		moving.element.style.top = moving.elementStart.y + 'px';
 	}
 
+	function doMouseDown(evt) {
+		startMove(evt.target, evt.clientX, evt.clientY, evt.target.offsetLeft, evt.target.offsetTop);
+	}
+
+	function getGuessElements(guess_id) {
+		var ret = [ ];
+		container.querySelectorAll("[data-guess-id='" + guess_id + "']").forEach((el) => {
+			var cl = el.classList;
+			if (cl.contains('pickable')) {
+				ret[0] = el;
+			} else {
+				ret[1] = el;
+			}
+		});
+
+		return ret;
+	}
+
 	function unguess(guess_id) {
 		if (guess_id) {
-			container.querySelectorAll("[data-guess-id='" + guess_id + "']").forEach((el) => {
-				var cl = el.classList;
-				if (cl.contains('pickable')) {
-					cl.remove('picked');
-					el.style.display = '';
-				} else {
-					el.innerText = '';
-					el.setAttribute('title', '');
-					el.removeAttribute('data-guess-id');
-					el.classList.remove('wrong');
-				}
-			});
+			let elements = getGuessElements(guess_id);
+			let el;
+			let cl;
+
+			if (elements[0]) {
+				el = elements[0];
+				cl = el.classList;
+				cl.remove('picked');
+				el.style.display = '';
+			}
+
+			if (elements[1]) {
+				console.log('unguess updating element 1');
+				el = elements[1];
+				cl = el.classList;
+				cl.remove('wrong');
+				el.innerText = '';
+				el.removeAttribute('data-guess-id');
+				el.setAttribute('title', '');
+			}
 		}
 	}
 
@@ -198,7 +225,12 @@ import { element } from 'svelte/internal';
 		if (!container) {
 			container = document.getElementById('container');
 		}
+
 		if (moving) {
+			if (evt.buttons == 0) {
+				doMouseUp(evt);
+				return;
+			}
 			moving.element.style.left = (moving.elementStart.x + evt.clientX - moving.pointerStart.x) + 'px';
 			moving.element.style.top = (moving.elementStart.y + evt.clientY - moving.pointerStart.y) + 'px';
 
@@ -231,8 +263,15 @@ import { element } from 'svelte/internal';
 	}
 
 	function doFillMeMouseDown(evt) {
-		// undo guess
-		unguess(evt.target.getAttribute('data-guess-id'));
+		let guess_id = evt.target.getAttribute('data-guess-id');
+		let elements = getGuessElements(guess_id);
+
+		if (elements && elements[0]) {
+			let left = evt.target.offsetLeft;
+			let top = evt.target.offsetTop;
+			unguess(guess_id);
+			startMove(elements[0], evt.clientX, evt.clientY, left, top);
+		}
 	}
 
 	function checkDone() {
