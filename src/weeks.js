@@ -129,15 +129,15 @@ export let weeks = [
 		name: '7',
 		steps: [
 			{
-				name: 'Opposites',
-				side: 'right'
-			},
-			{
 				name: 'Family'
 			},
 			{
 				name: 'WordPick',
 				title: 'Word Pick'
+			},
+			{
+				name: 'Opposites',
+				side: 'right'
 			},
 			{
 				name: 'ToneListening',

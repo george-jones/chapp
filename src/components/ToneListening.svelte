@@ -109,7 +109,6 @@
 	segments.forEach(function (seg) {
 		var q = seg.end - seg.start + 1;
 		var idx = seg.start + Math.floor(q * Math.random());
-		idx = 985;
 		chosen.push({ sentence: sentences[idx], number: idx + 1 });
 	});
 
