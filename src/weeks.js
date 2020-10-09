@@ -147,7 +147,8 @@ export let weeks = [
 	},
 	{
 		name: '8',
-		steps: [
+		steps: 
+		[
 			{
 				name: 'Colors'
 			},

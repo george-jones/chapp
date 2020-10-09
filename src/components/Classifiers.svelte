@@ -51,6 +51,7 @@
 	let mode;
 	let choices;
 	let shuffled = [ ];
+	let doingNext = false;
 
 	let findWords = function () {
 		let k;
@@ -134,9 +135,13 @@
 		currentWrong = false;
 		pickedClass = undefined;
 		pickedWord = undefined;
+		doingNext = false;
 	}
 
 	function doClick(evt) {
+		if (doingNext) {
+			return;
+		}
 		let t = evt.currentTarget;
 		let chinese = t.getAttribute('data-chinese');
 		let correct = false;
@@ -157,6 +162,7 @@
 				numTotal++;
 			}
 			pickedClass = 'pickedRight';
+			doingNext = true;
 			window.setTimeout(doNext, 1500);
 		} else {
 			if (!currentWrong) {

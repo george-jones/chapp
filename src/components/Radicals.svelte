@@ -54,6 +54,7 @@
 	let currentWrong = false;
 	let pickedClass;
 	let picked;
+	let doingNext = false;
 	let btnClass;
 
 	if (get(testingMode)) {
@@ -61,7 +62,9 @@
 	}
 
 	function finish () {
-		// How to communicate with parent?
+		if (finished) {
+			return;
+		}
 		let summary = `${numRight} / ${numTotal}`;
 		finished = true;
 		stepSummaries.update(function (v) {
@@ -89,9 +92,13 @@
 
 		currentWrong = false;
 		pickedClass = undefined;
+		doingNext = false;
 	}
 
 	function doClick() {
+		if (doingNext) {
+			return;
+		}
 		let correct = true;
 		
 		btnClass.forEach(function (r, idx) {
@@ -107,6 +114,7 @@
 			}
 			pickedClass = 'pickedRight';
 			window.setTimeout(doNext, 1500);
+			doingNext = true;
 		} else {
 			if (!currentWrong) {
 				currentWrong = true;

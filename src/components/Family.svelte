@@ -163,6 +163,7 @@
 	let currentWrong = false;
 	let pickedPerson;
 	let pickedClass;
+	let doingNext = false;
 
 	function finish () {
 		// How to communicate with parent?
@@ -176,6 +177,9 @@
 	}
 
 	function doClick (evt) {
+		if (doingNext) {
+			return;
+		}
 		let t = evt.target;
 		if (t.id) {
 			if (t.id === shuffled[currentIndex]) {
@@ -185,6 +189,7 @@
 				}
 				pickedPerson = current;
 				pickedClass = 'pickedRight';
+				doingNext = true;
 				window.setTimeout(doNext, 1000);
 			} else {
 				if (!currentWrong) {
@@ -218,6 +223,7 @@
 		if (!current) {
 			finish();
 		}
+		doingNext = false;
 	}
 
 	doNext();

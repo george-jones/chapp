@@ -101,6 +101,7 @@
 	let letterGuessing;
 	let options;
 	let lettersCssClass = 'chinese letters';
+	let doingNext = false;
 
 	if (get(testingMode)) {
 		segments = [ segments[segments.length - 2], segments[segments.length - 1] ];
@@ -160,6 +161,8 @@
 				letter.cssClass = 'hasTone';
 			}
 		}
+
+		doingNext = false;
 	};
 
 	function unmarkGuessingLetter() {
@@ -181,6 +184,9 @@
 	};
 
 	function optionClick(evt) {
+		if (doingNext) {
+			return;
+		}
 		let el = evt.currentTarget;
 		let value = el.getAttribute('data-value');
 		let someUnanswered = false;
@@ -223,6 +229,7 @@
 					numTotal += numTotalNow;
 					sendSummary();
 				}
+				doingNext = true;
 				window.setTimeout(doNext, 1000);
 			}
 		}

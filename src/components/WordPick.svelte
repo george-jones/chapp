@@ -54,6 +54,7 @@
 	let pickedWord;
 	let mode;
 	let choices;
+	let doingNext = false;
 
 	if (get(testingMode)) {
 		numWords = 3;
@@ -124,9 +125,13 @@
 		if (!current) {
 			//finish();
 		}
+		doingNext = false;
 	}
 
 	function doClick(evt) {
+		if (doingNext) {
+			return;
+		}
 		let t = evt.currentTarget;
 		let correct = false;
 
@@ -152,6 +157,7 @@
 				numTotal++;
 			}
 			pickedClass = 'pickedRight';
+			doingNext = true;
 			window.setTimeout(doNext, 1500);
 		} else {
 			if (!currentWrong) {

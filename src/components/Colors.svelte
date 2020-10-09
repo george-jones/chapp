@@ -56,6 +56,7 @@
 	let numRight = 0;
 	let numTotal = 0;
 	let finished = false;
+	let doingNext = false;
 
 	if (get(testingMode)) {
 		allColors = allColors.slice(0, 2);
@@ -67,6 +68,9 @@
 	];
 
 	function pickColor (event) {
+		if (doingNext) {
+			return;
+		}
 		let index = parseInt(event.target.getAttribute('data-index'), 10);
 		let colorGroup = pickingColor? 0 : 1;
 
@@ -89,6 +93,7 @@
 			pickedClass = 'pickedRight';
 			displayedColorClass = 'invisible';
 
+			doingNext = true;
 			window.setTimeout(nextColor, 1000);
 		} else {
 			pickedClass = 'pickedWrong';
@@ -118,6 +123,8 @@
 			displayedColorClass = '';
 			color = colors[1][colorNum];
 		}
+
+		doingNext = false;
 	}
 
 	function finish () {
