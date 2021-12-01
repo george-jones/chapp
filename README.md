@@ -1,1 +1,5 @@
-# This is my app for Chinese teaching for more experienced students
+# Chinese teaching app
+
+This is my Chinese language teaching app for more experienced students.
+
+![](familytree.png)
